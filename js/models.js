@@ -197,4 +197,18 @@ class User {
       return null;
     }
   }
+
+  addFavoriteStory(story){
+    this.favorites.append(story);
+  }
+  
+  removeFavoriteStory(story){
+    const storyIndex = this.favorites.indexOf(story);
+    if(storyIndex !== -1){
+      this.favorites.splice(storyIndex, 1);
+    }
+    else{
+      return;
+    }
+  }
 }

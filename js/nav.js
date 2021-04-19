@@ -43,3 +43,11 @@ function navSubmitStoryClick(){
 }
 
 $("#nav-story-submit").on("click", navSubmitStoryClick);
+
+function navViewFavoritesClick(){
+  console.debug("navViewFavorites");
+  hidePageComponents();
+  $favStoriesList.show()
+}
+
+$("#nav-favorites").on("click", )
