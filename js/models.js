@@ -199,7 +199,7 @@ class User {
   }
 
   addFavoriteStory(story){
-    this.favorites.append(story);
+    this.favorites.push(story);
   }
   
   removeFavoriteStory(story){

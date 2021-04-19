@@ -50,6 +50,16 @@ function putStoriesOnPage() {
   $allStoriesList.show();
 }
 
+function putFavoritesOnPage(){
+  console.debug("putFavoritesOnPage");
+  $favStoriesList.empty();
+  for(let story of currentUser.favorites){
+    const $story = generateStoryMarkup(story);
+    $favStoriesList.append($story);
+  }
+  $favStoriesList.show()
+}
+
 async function submitStoryForm(e){
   e.preventDefault();
   const $storyTitle = $("#story-title").val();
