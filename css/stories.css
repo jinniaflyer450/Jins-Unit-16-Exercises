@@ -37,3 +37,15 @@
 .story-user {
   display: block;
 }
+
+.clicked .favorite-button-inactive{
+  display: none;
+}
+
+.unclicked .favorite-button-active{
+  display: none;
+}
+
+
+
+/* https://stackoverflow.com/questions/19502835/is-it-possible-to-change-between-two-fontawesome-icons-on-hover Got help with css from here*/
