@@ -28,7 +28,6 @@
   <link rel="stylesheet" href="css/user.css">
   <link rel="stylesheet" href="css/stories.css">
   <link rel="stylesheet" href="css/nav.css">
-  <script src="https://kit.fontawesome.com/6c283353d3.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -40,10 +39,8 @@
   </div>
   <div class="nav-right">
     <a class="nav-link" href="#" id="nav-login">login/signup</a>
-    <a class="nav-link hidden" href="#" id="nav-user-profile"></a>
-    <a class = "nav-link hidden" href= "#" id = "nav-story-submit">submit story</a>
-    <a class = "nav-link hidden" href = "#" id = "nav-favorites">favorite stories</a>
-    <a class="nav-link hidden" id="nav-logout" href="#"><small>(logout)</small></a>
+    <a class="nav-link" href="#" id="nav-user-profile"></a>
+    <a class="hidden" id="nav-logout" href="#"><small>(logout)</small></a>
   </div>
 </nav>
 
@@ -55,7 +52,6 @@
 
   <!-- List of all stories -->
   <ol id="all-stories-list" class="stories-list"></ol>
-  <ol id="favorite-stories-list" class="stories-list"></ol>
 
 </section>
 
@@ -97,32 +93,6 @@
       <input id="signup-password" autocomplete="new-password" type="password">
     </div>
     <button type="submit">create account</button>
-  </form>
-</section>
-
-<!--Story submission form-->
-<!--Used this to figure out a post method issue: https://www.reddit.com/r/learnpython/comments/4fnjma/unsupported_method_post_by_simple_python_server/-->
-
-<section class = "container">
-  <form
-    action="#"
-    id="submission-form"
-    class= "hidden"
-    method="post">
-    <h4>Submit Story</h4>
-    <div>
-      <label for= "story-title">title</label>
-      <input id = "story-title">
-    </div>
-    <div>
-      <label for= "story-author">author</label>
-      <input id = "story-author">
-    </div>
-    <div>
-      <label for = "story-url">URL</label>
-      <input id = "story-url">
-    </div>
-    <button type = "submit">submit story</button>
   </form>
 </section>
 

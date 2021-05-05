@@ -32,23 +32,5 @@ function updateNavOnLogin() {
   $(".main-nav-links").show();
   $navLogin.hide();
   $navLogOut.show();
-  $navFavStories.show();
   $navUserProfile.text(`${currentUser.username}`).show();
-  $("#nav-story-submit").show();
 }
-
-function navSubmitStoryClick(){
-  console.debug("navSubmitStoryClick");
-  hidePageComponents();
-  $storyForm.show();
-}
-
-$("#nav-story-submit").on("click", navSubmitStoryClick);
-
-function navViewFavoritesClick(){
-  console.debug("navViewFavorites");
-  hidePageComponents();
-  putFavoritesOnPage();
-}
-
-$("#nav-favorites").on("click", navViewFavoritesClick)

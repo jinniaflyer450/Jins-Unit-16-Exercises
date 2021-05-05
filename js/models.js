@@ -73,12 +73,8 @@ class StoryList {
    * Returns the new Story instance
    */
 
-
-  // Tried to get help from this question and answer: https://stackoverflow.com/questions/51338277/async-function-returning-promise-instead-of-value
-  async addStory(user, newStory) {
-    await axios.post(`${BASE_URL}/stories`, {'token': user.loginToken, 'story': newStory});
-    let storyList = await StoryList.getStories();
-    return storyList.stories[0];
+  async addStory( /* user, newStory */) {
+    // UNIMPLEMENTED: complete this function!
   }
 }
 
@@ -195,16 +191,6 @@ class User {
     } catch (err) {
       console.error("loginViaStoredCredentials failed", err);
       return null;
-    }
-  }
-  
-  toggleFavoriteStory(story){
-    const storyIndex = this.favorites.indexOf(story);
-    if(storyIndex === -1){
-      this.favorites.push(story)
-    }
-    else{
-      this.favorites.splice(storyIndex, 1);
     }
   }
 }
