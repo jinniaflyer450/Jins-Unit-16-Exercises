@@ -194,4 +194,19 @@ class User {
       return null;
     }
   }
+  
+
+  //Needed help with delete param: https://masteringjs.io/tutorials/axios/delete
+  async toggleFavorite(user, id){
+    if(user.favorites.some(function(story){
+      return story.storyId === id;
+    })){
+      const response = await axios.delete(`${BASE_URL}/users/${user.username}/favorites/${id}`, {'data': {'token': user.loginToken}});
+      return response;
+    }
+    else{
+      const response = await axios.post(`${BASE_URL}/users/${user.username}/favorites/${id}`, {'token': user.loginToken});
+      return response;
+    }
+  }
 }

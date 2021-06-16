@@ -23,16 +23,44 @@ function generateStoryMarkup(story) {
   // console.debug("generateStoryMarkup", story);
 
   const hostName = story.getHostName();
-  return $(`
-      <li id="${story.storyId}">
-        <a href="${story.url}" target="a_blank" class="story-link">
-          ${story.title}
-        </a>
-        <small class="story-hostname">(${hostName})</small>
-        <small class="story-author">by ${story.author}</small>
-        <small class="story-user">posted by ${story.username}</small>
-      </li>
-    `);
+  if(!currentUser){
+    return $(`
+    <li id="${story.storyId}">
+      <a href="${story.url}" target="a_blank" class="story-link">
+        ${story.title}
+      </a>
+      <small class="story-hostname">(${hostName})</small>
+      <small class="story-author">by ${story.author}</small>
+      <small class="story-user">posted by ${story.username}</small>
+    </li>
+  `);
+  }
+  else if(currentUser.favorites.includes(story)){
+    return $(`
+    <li id="${story.storyId}">
+      <i class="fas fa-star"></i>
+      <a href="${story.url}" target="a_blank" class="story-link">
+        ${story.title}
+      </a>
+      <small class="story-hostname">(${hostName})</small>
+      <small class="story-author">by ${story.author}</small>
+      <small class="story-user">posted by ${story.username}</small>
+    </li>
+  `);
+  }
+  else{
+    return $(`
+    <li id="${story.storyId}">
+      <i class="far fa-star"></i>
+      <a href="${story.url}" target="a_blank" class="story-link">
+        ${story.title}
+      </a>
+      <small class="story-hostname">(${hostName})</small>
+      <small class="story-author">by ${story.author}</small>
+      <small class="story-user">posted by ${story.username}</small>
+    </li>
+  `);
+  }
 }
 
 /** Gets list of stories from server, generates their HTML, and puts on page. */
@@ -51,6 +79,34 @@ function putStoriesOnPage() {
   $allStoriesList.show();
 }
 
+function putFavoritesOnPage(){
+  console.debug("putFavoritesOnPage");
+
+  $favoriteStoriesList.empty();
+
+  for(let story of currentUser.favorites){
+    const $story = generateStoryMarkup(story);
+    $favoriteStoriesList.append($story);
+  }
+
+  $favoriteStoriesList.show();
+}
+
+
+function refreshStoryLists(){
+  if($favoriteStoriesList.attr('style') !== 'display: none;'){
+    putFavoritesOnPage();
+  }
+  else if($allStoriesList.attr('style') !== 'display: none;'){
+    putStoriesOnPage();
+  }
+}
+function toggleFavoriteOnPage(id){
+  console.debug("toggleFavoriteOnPage");
+  currentUser.toggleFavorite(currentUser, id);
+  refreshStoryLists();
+}
+
 async function submitStory(){
   console.debug("submitStory");
   const title = $("#story-submit-title").val();
@@ -66,3 +122,11 @@ $("#story-submission-form").on("submit", function(e){
   e.preventDefault();
   submitStory();
 });
+
+$('.stories-list').on("click", 'li i', function(){
+  console.log('Clicked!');
+})
+
+$('navbar a').on("click", function(){
+  refreshStoryLists();
+})
