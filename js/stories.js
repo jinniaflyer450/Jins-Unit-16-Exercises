@@ -127,6 +127,7 @@ $('.stories-list').on("click", 'li i', function(){
   console.log('Clicked!');
 })
 
-$('navbar a').on("click", function(){
+$('navbar a').on("click", function(e){
+  e.preventDefault();
   refreshStoryLists();
 })
