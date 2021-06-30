@@ -81,7 +81,6 @@ function putStoriesOnPage() {
 
 function putFavoritesOnPage(){
   console.debug("putFavoritesOnPage");
-
   $favoriteStoriesList.empty();
 
   for(let story of currentUser.favorites){
@@ -101,9 +100,9 @@ function refreshStoryLists(){
     putStoriesOnPage();
   }
 }
-function toggleFavoriteOnPage(id){
+async function toggleFavoriteOnPage(id){
   console.debug("toggleFavoriteOnPage");
-  currentUser.toggleFavorite(currentUser, id);
+  await currentUser.toggleFavorite(currentUser, id);
   refreshStoryLists();
 }
 
@@ -118,13 +117,16 @@ async function submitStory(){
   putStoriesOnPage();
 }
 
-$("#story-submission-form").on("submit", function(e){
+$("#story-submission-form").on("submit", async function(e){
   e.preventDefault();
-  submitStory();
+  await submitStory();
 });
 
-$('.stories-list').on("click", 'li i', function(){
-  console.log('Clicked!');
+$('.stories-list').on("click", 'li i', async function(e){
+  console.debug('toggleIndividualFavorite');
+  let target = e.target;
+  let id = $(target).parent().attr('id');
+  await toggleFavoriteOnPage(id)
 })
 
 $('navbar a').on("click", function(e){
