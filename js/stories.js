@@ -2,6 +2,7 @@
 
 // This is the global list of the stories, an instance of StoryList
 let storyList;
+let favStoryIds = [];
 
 /** Get and show stories when site first loads. */
 
@@ -19,20 +20,58 @@ async function getAndShowStoriesOnStart() {
  * Returns the markup for the story.
  */
 
-function generateStoryMarkup(story) {
-  // console.debug("generateStoryMarkup", story);
 
+function getFavoritesIds(favStoryIds){
+  if(currentUser){
+    for(let favStory of currentUser.favorites){
+      favStoryIds.push(favStory.storyId);
+    }
+  }
+}
+
+function generateStoryMarkup(story) {
+  //console.debug("generateStoryMarkup", story);
   const hostName = story.getHostName();
-  return $(`
-      <li id="${story.storyId}">
-        <a href="${story.url}" target="a_blank" class="story-link">
-          ${story.title}
-        </a>
-        <small class="story-hostname">(${hostName})</small>
-        <small class="story-author">by ${story.author}</small>
-        <small class="story-user">posted by ${story.username}</small>
-      </li>
-    `);
+  const favStoryIds = [];
+  getFavoritesIds(favStoryIds);
+  if(currentUser && favStoryIds.includes(story.storyId)){
+    return $(`
+    <li id="${story.storyId}">
+      <i class="fas fa-star"></i>
+      <a href="${story.url}" target="a_blank" class="story-link">
+        ${story.title}
+      </a>
+      <small class="story-hostname">(${hostName})</small>
+      <small class="story-author">by ${story.author}</small>
+      <small class="story-user">posted by ${story.username}</small>
+    </li>
+  `);
+  }
+  else if(currentUser){
+    return $(`
+    <li id="${story.storyId}">
+      <i class="far fa-star"></i>
+      <a href="${story.url}" target="a_blank" class="story-link">
+        ${story.title}
+      </a>
+      <small class="story-hostname">(${hostName})</small>
+      <small class="story-author">by ${story.author}</small>
+      <small class="story-user">posted by ${story.username}</small>
+    </li>
+  `);
+  }
+  else{
+    return $(`
+    <li id="${story.storyId}">
+      <a href="${story.url}" target="a_blank" class="story-link">
+        ${story.title}
+      </a>
+      <small class="story-hostname">(${hostName})</small>
+      <small class="story-author">by ${story.author}</small>
+      <small class="story-user">posted by ${story.username}</small>
+    </li>
+  `);
+  }
 }
 
 /** Gets list of stories from server, generates their HTML, and puts on page. */
@@ -82,3 +121,23 @@ async function submitNewStory(evt){
 }
 
 $submitStoryForm.on("submit", submitNewStory)
+
+$('.stories-list').on("click", "li i", async function(evt){
+  const id = $(evt.target).parent().attr("id");
+  const favStoryIds = [];
+  getFavoritesIds(favStoryIds);
+  if(favStoryIds.includes(id)){
+    $(evt.target).attr("class", "far fa-star");
+    await currentUser.deleteFavorite(id);
+  }
+  else{
+    $(evt.target).attr("class", "fas fa-star");
+    await currentUser.addFavorite(id);
+  }
+  if($favStoriesList[0].childElementCount !== 0){
+    putFavoritesOnPage();
+  }
+  else{
+    putStoriesOnPage();
+  }
+})

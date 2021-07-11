@@ -194,14 +194,14 @@ class User {
       return null;
     }
   }
-  async addFavorite(story){
-    const newFavoriteRes = await axios.post(`${BASE_URL}/users/${currentUser.username}/favorites/${story.storyId}`, 
+  async addFavorite(storyId){
+    const newFavoriteRes = await axios.post(`${BASE_URL}/users/${currentUser.username}/favorites/${storyId}`, 
     {'token': currentUser.loginToken});
     return newFavoriteRes;
   }
   // https://masteringjs.io/tutorials/axios/delete Learned more about delete requests here.
-  async deleteFavorite(story){
-    const oldFavoriteRes = await axios.delete(`${BASE_URL}/users/${currentUser.username}/favorites/${story.storyId}`,
+  async deleteFavorite(storyId){
+    const oldFavoriteRes = await axios.delete(`${BASE_URL}/users/${currentUser.username}/favorites/${storyId}`,
     {'data': {'token': currentUser.loginToken}});
     return oldFavoriteRes;
   }
