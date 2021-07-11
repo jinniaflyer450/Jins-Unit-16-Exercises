@@ -73,7 +73,7 @@ class StoryList {
    * Returns the new Story instance
    */
 
-  async addStory(currentUser, story) {
+  async addStory(story) {
     const newStory = await axios.post(`${BASE_URL}/stories`, {'token': currentUser.loginToken, 'story': story});
     return newStory.data.story;
   }
@@ -193,5 +193,16 @@ class User {
       console.error("loginViaStoredCredentials failed", err);
       return null;
     }
+  }
+  async addFavorite(story){
+    const newFavorite = await axios.post(`${BASE_URL}/users/${currentUser.username}/favorites/${story.storyId}`, 
+    {'token': currentUser.loginToken});
+    return newFavorite;
+  }
+  // https://masteringjs.io/tutorials/axios/delete Learned more about delete requests here.
+  async deleteFavorite(story){
+    const oldFavorite = await axios.delete(`${BASE_URL}/users/${currentUser.username}/favorites/${story.storyId}`,
+    {'data': {'token': currentUser.loginToken}});
+    return oldFavorite;
   }
 }
