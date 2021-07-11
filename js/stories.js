@@ -123,6 +123,7 @@ async function submitNewStory(evt){
 $submitStoryForm.on("submit", submitNewStory)
 
 $('.stories-list').on("click", "li i", async function(evt){
+  evt.preventDefault();
   const id = $(evt.target).parent().attr("id");
   const favStoryIds = [];
   getFavoritesIds(favStoryIds);
@@ -134,10 +135,14 @@ $('.stories-list').on("click", "li i", async function(evt){
     $(evt.target).attr("class", "fas fa-star");
     await currentUser.addFavorite(id);
   }
+  storyList = await StoryList.getStories();
   if($favStoriesList[0].childElementCount !== 0){
     putFavoritesOnPage();
   }
   else{
     putStoriesOnPage();
   }
+
+  //This is a hack, but I'm not sure how to get the app to change the color of the favorite stars entirely without a forced refresh.
+  location.reload();
 })
