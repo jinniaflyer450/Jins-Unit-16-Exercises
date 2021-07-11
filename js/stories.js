@@ -41,6 +41,7 @@ function putStoriesOnPage() {
   console.debug("putStoriesOnPage");
 
   $allStoriesList.empty();
+  $favStoriesList.empty();
 
   // loop through all of our stories and generate HTML for them
   for (let story of storyList.stories) {
@@ -49,6 +50,20 @@ function putStoriesOnPage() {
   }
 
   $allStoriesList.show();
+}
+
+function putFavoritesOnPage(){
+  console.debug("putFavoritesOnPage");
+
+  $allStoriesList.empty();
+  $favStoriesList.empty();
+
+  for(let story of currentUser.favorites){
+    const $story = generateStoryMarkup(story);
+    $favStoriesList.append($story);
+  }
+
+  $favStoriesList.show();
 }
 
 async function submitNewStory(evt){

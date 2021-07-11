@@ -33,6 +33,14 @@ function navSubmitStoryClick(evt){
 
 $navSubmitStory.on("click", navSubmitStoryClick);
 
+function navFavoritesClick(evt){
+  console.debug("navFavoritesClick", evt);
+  hidePageComponents();
+  putFavoritesOnPage();
+}
+
+$navFavorites.on("click", navFavoritesClick);
+
 /** When a user first logins in, update the navbar to reflect that. */
 
 function updateNavOnLogin() {
@@ -40,6 +48,7 @@ function updateNavOnLogin() {
   $(".main-nav-links").show();
   $navLogin.hide();
   $navLogOut.show();
+  $navFavorites.show();
   $navSubmitStory.show();
   $navUserProfile.text(`${currentUser.username}`).show();
 }
