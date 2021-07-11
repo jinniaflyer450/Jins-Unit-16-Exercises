@@ -40,8 +40,7 @@
   <div class="nav-right">
     <a class="nav-link" href="#" id="nav-login">login/signup</a>
     <a class="nav-link" href="#" id="nav-user-profile"></a>
-    <a class="nav-link hidden" href="#" id="nav-favorite-stories">favorites</a>
-    <a class="nav-link hidden" href="#" id="nav-story-submit">submit story</a>
+    <a class="hidden nav-link" href="#" id="nav-submit-story">submit story</a>
     <a class="hidden" id="nav-logout" href="#"><small>(logout)</small></a>
   </div>
 </nav>
@@ -54,9 +53,6 @@
 
   <!-- List of all stories -->
   <ol id="all-stories-list" class="stories-list"></ol>
-
-  <!-- List of favorite stories -->
-  <ol id="favorite-stories-list" class ="stories-list"></ol>
 
 </section>
 
@@ -100,35 +96,29 @@
     <button type="submit">create account</button>
   </form>
 </section>
-
-<!--Story submission form-->
+<!--Submit story form-->
 <section class="account-forms-container container">
-  <form
-  action="#"
-  id="story-submission-form"
-  class= "account-form hidden"
-  method="post">
+<form action="#" id= "submit-story-form" class="account-form hidden" method="POST">
   <h4>Submit Story</h4>
   <div class="login-input">
-    <label for="story-submit-title">title</label>
-    <input id="story-submit-title">
+    <label for="submit-story-title">title</label>
+    <input id="submit-story-title">
   </div>
   <div class="login-input">
-    <label for="story-submit-author">author</label>
-    <input id="story-submit-author">
+    <label for="submit-story-author">author</label>
+    <input id="submit-story-author">
   </div>
-  <div class = "login-input">
-    <label for="story-submit-url">url</label>
-    <input id="story-submit-url">
+  <div class="login-input">
+    <label for="submit-story-url">url</label>
+    <input id="submit-story-url">
   </div>
   <button type="submit">submit story</button>
-  </form>
+</form>
 </section>
 
 <!-- Library JS & our JS -->
 <script src="https://unpkg.com/jquery"></script>
 <script src="https://unpkg.com/axios/dist/axios.js"></script>
-<script src="https://kit.fontawesome.com/6c283353d3.js" crossorigin="anonymous"></script>
 
 <script src="js/models.js"></script>
 <script src="js/main.js"></script>

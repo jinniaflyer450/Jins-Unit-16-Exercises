@@ -23,44 +23,16 @@ function generateStoryMarkup(story) {
   // console.debug("generateStoryMarkup", story);
 
   const hostName = story.getHostName();
-  if(!currentUser){
-    return $(`
-    <li id="${story.storyId}">
-      <a href="${story.url}" target="a_blank" class="story-link">
-        ${story.title}
-      </a>
-      <small class="story-hostname">(${hostName})</small>
-      <small class="story-author">by ${story.author}</small>
-      <small class="story-user">posted by ${story.username}</small>
-    </li>
-  `);
-  }
-  else if(currentUser.favorites.includes(story)){
-    return $(`
-    <li id="${story.storyId}">
-      <i class="fas fa-star"></i>
-      <a href="${story.url}" target="a_blank" class="story-link">
-        ${story.title}
-      </a>
-      <small class="story-hostname">(${hostName})</small>
-      <small class="story-author">by ${story.author}</small>
-      <small class="story-user">posted by ${story.username}</small>
-    </li>
-  `);
-  }
-  else{
-    return $(`
-    <li id="${story.storyId}">
-      <i class="far fa-star"></i>
-      <a href="${story.url}" target="a_blank" class="story-link">
-        ${story.title}
-      </a>
-      <small class="story-hostname">(${hostName})</small>
-      <small class="story-author">by ${story.author}</small>
-      <small class="story-user">posted by ${story.username}</small>
-    </li>
-  `);
-  }
+  return $(`
+      <li id="${story.storyId}">
+        <a href="${story.url}" target="a_blank" class="story-link">
+          ${story.title}
+        </a>
+        <small class="story-hostname">(${hostName})</small>
+        <small class="story-author">by ${story.author}</small>
+        <small class="story-user">posted by ${story.username}</small>
+      </li>
+    `);
 }
 
 /** Gets list of stories from server, generates their HTML, and puts on page. */
@@ -78,58 +50,3 @@ function putStoriesOnPage() {
 
   $allStoriesList.show();
 }
-
-function putFavoritesOnPage(){
-  console.debug("putFavoritesOnPage");
-  $favoriteStoriesList.empty();
-
-  for(let story of currentUser.favorites){
-    const $story = generateStoryMarkup(story);
-    $favoriteStoriesList.append($story);
-  }
-
-  $favoriteStoriesList.show();
-}
-
-
-function refreshStoryLists(){
-  if($favoriteStoriesList.attr('style') !== 'display: none;'){
-    putFavoritesOnPage();
-  }
-  else if($allStoriesList.attr('style') !== 'display: none;'){
-    putStoriesOnPage();
-  }
-}
-async function toggleFavoriteOnPage(id){
-  console.debug("toggleFavoriteOnPage");
-  await currentUser.toggleFavorite(currentUser, id);
-  refreshStoryLists();
-}
-
-async function submitStory(){
-  console.debug("submitStory");
-  const title = $("#story-submit-title").val();
-  const author = $("#story-submit-author").val();
-  const url = $("#story-submit-url").val();
-  const newStory = {title, author, url};
-  await storyList.addStory(currentUser, newStory);
-  storyList = await StoryList.getStories();
-  putStoriesOnPage();
-}
-
-$("#story-submission-form").on("submit", async function(e){
-  e.preventDefault();
-  await submitStory();
-});
-
-$('.stories-list').on("click", 'li i', async function(e){
-  console.debug('toggleIndividualFavorite');
-  let target = e.target;
-  let id = $(target).parent().attr('id');
-  await toggleFavoriteOnPage(id)
-})
-
-$('navbar a').on("click", function(e){
-  e.preventDefault();
-  refreshStoryLists();
-})

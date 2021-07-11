@@ -25,6 +25,14 @@ function navLoginClick(evt) {
 
 $navLogin.on("click", navLoginClick);
 
+function navSubmitStoryClick(evt){
+  console.debug("navSubmitStoryClick", evt);
+  hidePageComponents();
+  $submitStoryForm.show();
+}
+
+$navSubmitStory.on("click", navSubmitStoryClick);
+
 /** When a user first logins in, update the navbar to reflect that. */
 
 function updateNavOnLogin() {
@@ -32,26 +40,6 @@ function updateNavOnLogin() {
   $(".main-nav-links").show();
   $navLogin.hide();
   $navLogOut.show();
-  $navStorySubmit.show();
-  $navFavorites.show();
-  $loginForm.hide();
-  $signupForm.hide();
+  $navSubmitStory.show();
   $navUserProfile.text(`${currentUser.username}`).show();
 }
-
-function navSubmitClick(){
-  console.debug("navSubmitClick");
-  hidePageComponents();
-  $storySubmitForm.show();
-}
-
-$navStorySubmit.on("click", navSubmitClick);
-
-function navFavoritesClick(){
-  console.debug("navFavoritesClick");
-  hidePageComponents();
-  putFavoritesOnPage();
-  $favoriteStoriesList.show();
-}
-
-$navFavorites.on("click", navFavoritesClick);
