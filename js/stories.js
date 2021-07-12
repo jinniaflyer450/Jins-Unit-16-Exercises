@@ -81,6 +81,7 @@ function putStoriesOnPage() {
 
   $allStoriesList.empty();
   $favStoriesList.empty();
+  $ownStoriesList.empty();
 
   // loop through all of our stories and generate HTML for them
   for (let story of storyList.stories) {
@@ -96,6 +97,7 @@ function putFavoritesOnPage(){
 
   $allStoriesList.empty();
   $favStoriesList.empty();
+  $ownStoriesList.empty();
 
   for(let story of currentUser.favorites){
     const $story = generateStoryMarkup(story);
@@ -103,6 +105,20 @@ function putFavoritesOnPage(){
   }
 
   $favStoriesList.show();
+}
+
+function putOwnStoriesOnPage(){
+  console.debug("putOwnStoriesOnPage");
+
+  $allStoriesList.empty();
+  $favStoriesList.empty();
+  $ownStoriesList.empty();
+
+  for(let story of currentUser.ownStories){
+    const $story = generateStorymarkup(story);
+    $ownStoriesList.append($story);
+  }
+  $ownStoriesList.show();
 }
 
 async function submitNewStory(evt){

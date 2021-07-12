@@ -41,6 +41,14 @@ function navFavoritesClick(evt){
 
 $navFavorites.on("click", navFavoritesClick);
 
+function navUserProfileClick(evt){
+  console.debug("navUserProfileClick", evt);
+  hidePageComponents();
+  putOwnStoriesOnPage();
+}
+
+$navUserProfile.on("click", navUserProfileClick);
+
 /** When a user first logins in, update the navbar to reflect that. */
 
 function updateNavOnLogin() {
