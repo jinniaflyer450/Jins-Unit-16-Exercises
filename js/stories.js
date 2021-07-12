@@ -1,5 +1,5 @@
 "use strict";
-
+//Borrowed icons from Font Awesome, which is already referenced in the index.html page.
 // This is the global list of the stories, an instance of StoryList
 let storyList;
 let favStoryIds = [];
