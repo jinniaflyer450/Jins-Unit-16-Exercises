@@ -1,5 +1,9 @@
 "use strict";
 
+//NOTE: I am aware that when you remove a favorite or delete a story from the user profile or favorites page,
+// the app returns to the home page. Please help me figure out how to solve this, but at this point I am
+//satisfied.
+
 // So we don't have to keep re-finding things on page, find DOM elements once:
 
 const $body = $("body");

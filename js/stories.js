@@ -29,12 +29,50 @@ function getFavoritesIds(favStoryIds){
   }
 }
 
+function getOwnIds(ownIds){
+  if(currentUser){
+    for(let ownStory of currentUser.ownStories){
+      ownIds.push(ownStory.storyId);
+    }
+  }
+}
+
 function generateStoryMarkup(story) {
   //console.debug("generateStoryMarkup", story);
   const hostName = story.getHostName();
   const favStoryIds = [];
+  const ownIds = [];
   getFavoritesIds(favStoryIds);
-  if(currentUser && favStoryIds.includes(story.storyId)){
+  getOwnIds(ownIds);
+  if(currentUser && favStoryIds.includes(story.storyId) && ownIds.includes(story.storyId)){
+    return $(`
+    <li id="${story.storyId}">
+      <i class="fas fa-trash-alt"></i>
+      <i class="fas fa-star"></i>
+      <a href="${story.url}" target="a_blank" class="story-link">
+        ${story.title}
+      </a>
+      <small class="story-hostname">(${hostName})</small>
+      <small class="story-author">by ${story.author}</small>
+      <small class="story-user">posted by ${story.username}</small>
+    </li>
+  `);
+  }
+  else if(currentUser && ownIds.includes(story.storyId)){
+    return $(`
+    <li id="${story.storyId}">
+      <i class="fas fa-trash-alt"></i>
+      <i class="far fa-star"></i>
+      <a href="${story.url}" target="a_blank" class="story-link">
+        ${story.title}
+      </a>
+      <small class="story-hostname">(${hostName})</small>
+      <small class="story-author">by ${story.author}</small>
+      <small class="story-user">posted by ${story.username}</small>
+    </li>
+  `);
+  }
+  else if(currentUser && favStoryIds.includes(story.storyId)){
     return $(`
     <li id="${story.storyId}">
       <i class="fas fa-star"></i>
@@ -82,6 +120,7 @@ function putStoriesOnPage() {
   $allStoriesList.empty();
   $favStoriesList.empty();
   $ownStoriesList.empty();
+  hidePageComponents();
 
   // loop through all of our stories and generate HTML for them
   for (let story of storyList.stories) {
@@ -98,6 +137,7 @@ function putFavoritesOnPage(){
   $allStoriesList.empty();
   $favStoriesList.empty();
   $ownStoriesList.empty();
+  hidePageComponents();
 
   for(let story of currentUser.favorites){
     const $story = generateStoryMarkup(story);
@@ -113,9 +153,10 @@ function putOwnStoriesOnPage(){
   $allStoriesList.empty();
   $favStoriesList.empty();
   $ownStoriesList.empty();
+  hidePageComponents();
 
   for(let story of currentUser.ownStories){
-    const $story = generateStorymarkup(story);
+    const $story = generateStoryMarkup(story);
     $ownStoriesList.append($story);
   }
   $ownStoriesList.show();
@@ -133,13 +174,15 @@ async function submitNewStory(evt){
 
   await storyList.addStory(storyInfo);
   storyList = await StoryList.getStories();
+  hidePageComponents();
   putStoriesOnPage();
+  //This is the third time I have used location.reload() in place of a better solution--see line 206 of stories.js.
+  location.reload();
 }
 
 $submitStoryForm.on("submit", submitNewStory)
 
-$('.stories-list').on("click", "li i", async function(evt){
-  evt.preventDefault();
+$('.stories-list').on("click", "li i.fa-star", async function(evt){
   const id = $(evt.target).parent().attr("id");
   const favStoryIds = [];
   getFavoritesIds(favStoryIds);
@@ -152,13 +195,36 @@ $('.stories-list').on("click", "li i", async function(evt){
     await currentUser.addFavorite(id);
   }
   storyList = await StoryList.getStories();
+  hidePageComponents();
   if($favStoriesList[0].childElementCount !== 0){
     putFavoritesOnPage();
+  }
+  else if($ownStoriesList[0].childElementCount !== 0){
+    putOwnStoriesOnPage();
   }
   else{
     putStoriesOnPage();
   }
 
   //This is a hack, but I'm not sure how to get the app to change the color of the favorite stars entirely without a forced refresh.
+  location.reload();
+})
+
+$('.stories-list').on("click", "li i.fa-trash-alt", async function(evt){
+  const id= $(evt.target).parent().attr("id");
+  await currentUser.deleteOwnStory(id);
+  storyList = await StoryList.getStories();
+  hidePageComponents();
+  if($favStoriesList[0].childElementCount !== 0){
+    putFavoritesOnPage();
+  }
+  else if($ownStoriesList[0].childElementCount !== 0){
+    putOwnStoriesOnPage();
+  }
+  else{
+    putStoriesOnPage();
+  }
+
+  //This is also a hack for the same reason as the first one.
   location.reload();
 })

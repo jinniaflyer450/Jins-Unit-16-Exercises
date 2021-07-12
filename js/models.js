@@ -205,4 +205,9 @@ class User {
     {'data': {'token': currentUser.loginToken}});
     return oldFavoriteRes;
   }
+
+  async deleteOwnStory(storyId){
+    const oldStoryRes = await axios.delete(`${BASE_URL}/stories/${storyId}`, {'data': {'token': currentUser.loginToken}});
+    return oldStoryRes;
+  }
 }
