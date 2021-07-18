@@ -71,11 +71,11 @@
     <h4>Login</h4>
     <div class="login-input">
       <label for="login-username">username</label>
-      <input id="login-username" autocomplete="current-username">
+      <input id="login-username" autocomplete="current-username" required>
     </div>
     <div class="login-input">
       <label for="login-password">password</label>
-      <input id="login-password" type="password" autocomplete="current-password">
+      <input id="login-password" type="password" autocomplete="current-password" required>
     </div>
     <button type="submit">login</button>
     <hr>
@@ -90,15 +90,15 @@
     <h4>Create Account</h4>
     <div class="login-input">
       <label for="signup-name">name</label>
-      <input id="signup-name" autocapitalize="words">
+      <input id="signup-name" autocapitalize="words" required>
     </div>
     <div class="login-input">
       <label for="signup-username">username</label>
-      <input id="signup-username" autocomplete="new-username">
+      <input id="signup-username" autocomplete="new-username" required>
     </div>
     <div class="login-input">
       <label for="signup-password">password</label>
-      <input id="signup-password" autocomplete="new-password" type="password">
+      <input id="signup-password" autocomplete="new-password" type="password" required>
     </div>
     <button type="submit">create account</button>
   </form>
@@ -109,15 +109,15 @@
   <h4>Submit Story</h4>
   <div class="login-input">
     <label for="submit-story-title">title</label>
-    <input id="submit-story-title">
+    <input id="submit-story-title" required>
   </div>
   <div class="login-input">
     <label for="submit-story-author">author</label>
-    <input id="submit-story-author">
+    <input id="submit-story-author" required>
   </div>
   <div class="login-input">
     <label for="submit-story-url">url</label>
-    <input id="submit-story-url">
+    <input id="submit-story-url" required type="url">
   </div>
   <button type="submit">submit story</button>
 </form>

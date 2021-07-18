@@ -25,7 +25,6 @@ async function login(evt) {
 
   saveUserCredentialsInLocalStorage();
   updateUIOnUserLogin();
-  putStoriesOnPage();
 }
 
 $loginForm.on("submit", login);
@@ -112,6 +111,7 @@ function updateUIOnUserLogin() {
   console.debug("updateUIOnUserLogin");
 
   hidePageComponents();
+  putStoriesOnPage();
   $allStoriesList.show();
 
   updateNavOnLogin();

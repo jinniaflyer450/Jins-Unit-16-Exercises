@@ -24,7 +24,9 @@ class Story {
   /** Parses hostname out of URL and returns it. */
 
   getHostName() {
-    // UNIMPLEMENTED: complete this function!
+    //https://www.w3schools.com/js/js_string_methods.asp Help with string methods here.
+    //https://www.w3schools.com/js/js_regexp.asp And regular expressions.
+    let startHostName = this.url.search(/./) + 1; 
     return "hostname.com";
   }
 }
@@ -194,20 +196,37 @@ class User {
       return null;
     }
   }
+
+  //currentUser is instantiated in user.js (line 4)
   async addFavorite(storyId){
     const newFavoriteRes = await axios.post(`${BASE_URL}/users/${currentUser.username}/favorites/${storyId}`, 
     {'token': currentUser.loginToken});
+    for(let story of storyList.stories){
+      if(story.storyId === storyId){
+        currentUser.favorites.push(story);
+      }
+    }
     return newFavoriteRes;
   }
   // https://masteringjs.io/tutorials/axios/delete Learned more about delete requests here.
   async deleteFavorite(storyId){
     const oldFavoriteRes = await axios.delete(`${BASE_URL}/users/${currentUser.username}/favorites/${storyId}`,
     {'data': {'token': currentUser.loginToken}});
+    for(let storyIndex = 0; storyIndex < storyList.stories.length; storyIndex++){
+      if(storyList.stories[storyIndex].storyId === storyId){
+        currentUser.favorites.splice(storyIndex, 1);
+      }
+    }
     return oldFavoriteRes;
   }
 
   async deleteOwnStory(storyId){
     const oldStoryRes = await axios.delete(`${BASE_URL}/stories/${storyId}`, {'data': {'token': currentUser.loginToken}});
+    for(let storyIndex = 0; storyIndex < storyList.stories.length; storyIndex++){
+      if(storyList.stories[storyIndex].storyId === storyId){
+        currentUser.ownStories.splice(storyIndex, 1);
+      }
+    }
     return oldStoryRes;
   }
 }

@@ -10,7 +10,7 @@ async function getAndShowStoriesOnStart() {
   storyList = await StoryList.getStories();
   $storiesLoadingMsg.remove();
 
-  putStoriesOnPage();
+  await putStoriesOnPage();
 }
 
 /**
@@ -114,13 +114,15 @@ function generateStoryMarkup(story) {
 
 /** Gets list of stories from server, generates their HTML, and puts on page. */
 
-function putStoriesOnPage() {
+async function putStoriesOnPage() {
   console.debug("putStoriesOnPage");
 
   $allStoriesList.empty();
   $favStoriesList.empty();
   $ownStoriesList.empty();
   hidePageComponents();
+
+  storyList = await StoryList.getStories();
 
   // loop through all of our stories and generate HTML for them
   for (let story of storyList.stories) {
@@ -131,13 +133,15 @@ function putStoriesOnPage() {
   $allStoriesList.show();
 }
 
-function putFavoritesOnPage(){
+async function putFavoritesOnPage(){
   console.debug("putFavoritesOnPage");
 
   $allStoriesList.empty();
   $favStoriesList.empty();
   $ownStoriesList.empty();
   hidePageComponents();
+
+  storyList = await StoryList.getStories();
 
   for(let story of currentUser.favorites){
     const $story = generateStoryMarkup(story);
@@ -147,13 +151,15 @@ function putFavoritesOnPage(){
   $favStoriesList.show();
 }
 
-function putOwnStoriesOnPage(){
+async function putOwnStoriesOnPage(){
   console.debug("putOwnStoriesOnPage");
 
   $allStoriesList.empty();
   $favStoriesList.empty();
   $ownStoriesList.empty();
   hidePageComponents();
+
+  storyList = await StoryList.getStories();
 
   for(let story of currentUser.ownStories){
     const $story = generateStoryMarkup(story);
@@ -175,9 +181,7 @@ async function submitNewStory(evt){
   await storyList.addStory(storyInfo);
   storyList = await StoryList.getStories();
   hidePageComponents();
-  putStoriesOnPage();
-  //This is the third time I have used location.reload() in place of a better solution--see line 206 of stories.js.
-  location.reload();
+  await putStoriesOnPage();
 }
 
 $submitStoryForm.on("submit", submitNewStory)
@@ -197,17 +201,14 @@ $('.stories-list').on("click", "li i.fa-star", async function(evt){
   storyList = await StoryList.getStories();
   hidePageComponents();
   if($favStoriesList[0].childElementCount !== 0){
-    putFavoritesOnPage();
+    await putFavoritesOnPage();
   }
   else if($ownStoriesList[0].childElementCount !== 0){
-    putOwnStoriesOnPage();
+    await putOwnStoriesOnPage();
   }
   else{
-    putStoriesOnPage();
+    await putStoriesOnPage();
   }
-
-  //This is a hack, but I'm not sure how to get the app to change the color of the favorite stars entirely without a forced refresh.
-  location.reload();
 })
 
 $('.stories-list').on("click", "li i.fa-trash-alt", async function(evt){
@@ -224,7 +225,4 @@ $('.stories-list').on("click", "li i.fa-trash-alt", async function(evt){
   else{
     putStoriesOnPage();
   }
-
-  //This is also a hack for the same reason as the first one.
-  location.reload();
 })
