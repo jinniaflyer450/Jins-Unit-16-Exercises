@@ -26,8 +26,22 @@ class Story {
   getHostName() {
     //https://www.w3schools.com/js/js_string_methods.asp Help with string methods here.
     //https://www.w3schools.com/js/js_regexp.asp And regular expressions.
-    let startHostName = this.url.search(/./) + 1; 
-    return "hostname.com";
+    let startHostName = 0;
+    let endHostName = this.url.length;
+    if(this.url.includes('http://www.') || this.url.includes('https://www.') || this.url.includes('www.')){
+      startHostName = this.url.indexOf('.') + 1; 
+    }
+    else if(this.url.includes('http://')){
+      startHostName = 7;
+    }
+    else if(this.url.includes('https://')){
+      startHostName = 8;
+    }
+    let hostNameWithoutHeader = this.url.slice(startHostName);
+    if(hostNameWithoutHeader.indexOf('/') !== -1){
+      endHostName = hostNameWithoutHeader.indexOf('/');
+    }
+    return hostNameWithoutHeader.slice(0, endHostName);
   }
 }
 
@@ -77,6 +91,8 @@ class StoryList {
 
   async addStory(story) {
     const newStory = await axios.post(`${BASE_URL}/stories`, {'token': currentUser.loginToken, 'story': story});
+    currentUser.ownStories.push(newStory);
+    storyList = StoryList.getStories();
     return newStory.data.story;
   }
 }
@@ -214,7 +230,8 @@ class User {
     {'data': {'token': currentUser.loginToken}});
     for(let storyIndex = 0; storyIndex < storyList.stories.length; storyIndex++){
       if(storyList.stories[storyIndex].storyId === storyId){
-        currentUser.favorites.splice(storyIndex, 1);
+        let favoriteIndex = currentUser.favorites.indexOf(storyList.stories[storyIndex]);
+        currentUser.favorites.splice(favoriteIndex, 1);
       }
     }
     return oldFavoriteRes;
@@ -224,7 +241,8 @@ class User {
     const oldStoryRes = await axios.delete(`${BASE_URL}/stories/${storyId}`, {'data': {'token': currentUser.loginToken}});
     for(let storyIndex = 0; storyIndex < storyList.stories.length; storyIndex++){
       if(storyList.stories[storyIndex].storyId === storyId){
-        currentUser.ownStories.splice(storyIndex, 1);
+        let ownIndex = currentUser.ownStories.indexOf(storyList.stories[storyIndex]);
+        currentUser.ownStories.splice(ownIndex, 1);
       }
     }
     return oldStoryRes;
